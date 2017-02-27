@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>{% block title %} Image viewer {% endblock %}</title>
+  <meta charset="utf-8" />
+  <link rel="stylesheet" href="{{url_for('static', filename='css/bootstrap.min.css')}}">
+  <link rel="stylesheet" href="{{url_for('static', filename='css/main.css')}}">
+
+  <script type="text/javascript" charset="utf&#45;8" src="{{url_for('static', filename='js/jquery.js')}}"></script>
+  <script type="text/javascript" charset="utf&#45;8" src="{{url_for('static', filename='js/jquery-ui.min.js')}}"></script>
+  <script type="text/javascript" charset="utf&#45;8" src="{{url_for('static', filename='js/bootstrap.min.js')}}"></script>
+  <script type="text/javascript" charset="utf&#45;8" src="{{url_for('static', filename='js/URI.js')}}"></script>
+  <script type="text/javascript" charset="utf&#45;8" src="{{url_for('static', filename='js/viewer.js')}}"></script>
+
+    <!-- data -->
+    <!-- <script src="json/datasets.js" type="text/javascript" charset="utf&#45;8"></script> -->
+    <!-- <script src="json/dataset_names.js" type="text/javascript" charset="utf&#45;8"></script> -->
+    <!-- <script src="json/aggregated_metrics.js" type="text/javascript" charset="utf&#45;8"></script> -->
+    <!-- <script src="json/all_metrics.js" type="text/javascript" charset="utf&#45;8"></script> -->
+    <!-- <script src="json/method_names.js" type="text/javascript" charset="utf&#45;8"></script> -->
+  {% block head %}
+  {% endblock %}
+
+  <!-- app -->
+  <!-- <script src="js/index.js" type="text/javascript" charset="utf&#45;8"></script> -->
+  <!-- <script src="json/dataset_names.js" type="text/javascript" charset="utf&#45;8"></script> -->
+  <!-- <script src="json/datasets.js" type="text/javascript" charset="utf&#45;8"></script> -->
+  <!-- <script src="json/aggregated_metrics.js" type="text/javascript" charset="utf&#45;8"></script> -->
+  <!-- <script src="json/method_names.js" type="text/javascript" charset="utf&#45;8"></script> -->
+  <!-- <script src="json/running_times.js" type="text/javascript" charset="utf&#45;8"></script> -->
+
+  <!-- data -->
+</head>
+<body>
+    <header>
+    </header>
+    <div class="container">
+      {% block body %}
+      {% endblock %}
+    </div>
+    <footer>
+    </footer>
+</body>
+
+</html>

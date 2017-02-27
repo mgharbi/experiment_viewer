@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block body %}
+<div class="row">
+    <div class="col-md-12">
+        <h1>
+          Experiments
+          <small>
+            {{datadir}}
+          </small>
+        </h1>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <h3>
+          Experiments
+        </h3>
+        <table id="globalScores" class="table table-hover">
+          <tbody>
+            {% for e in experiments %}
+              <tr>
+                <th>
+                  <a href="{{ url_for('experiment', experiment_name=e[0])}}"> {{ e[0] }} </a>
+                </th>
+                <td>
+                  {{ e[2] }}
+                </td>
+                <td>
+                  {{ e[1] }} images
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+  </div>
+</div>
+{% endblock %}
+

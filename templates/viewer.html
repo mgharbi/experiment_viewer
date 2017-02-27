@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% block head %}
+  <script type="text/javascript" charset="utf&#45;8" src="{{url_for('static', filename='js/main.js')}}"></script>
+{% endblock %}
+{% block body %}
+<meta id="datasets" data-datasets="{{datasets}}" data-images="{{images}}" data-urls="{{urls}}">
+<div class="row col-md-12 header-block">
+    <h1>
+      {{ experiment_name }}
+    </h1>
+    <p>
+    Back to  <a href="{{url_for('index')}}">index</a>
+    </p>
+</div>
+<div class="col-md-8">
+    <div class="row">
+        <div class="form-group text-left col-md-6">
+            <label>
+                Image
+            </label>
+            <select id="selImage" class="form-control">
+            </select>
+        </div>
+    </div>
+</div>
+<div class="col-md-10 ">
+    <div class="row text-center">
+        <h3 class="text-center"> <strong class="leftTitle  text-capitalize">
+          </strong> vs. <strong class="rightTitle  text-capitalize"></strong></br>
+          <small><span id="imageTitle"> </span></small>
+        </h3>
+        <p class="text-center"> zoom <span id="scale_label"> 100 % </span></p>
+        <div>
+            <figure>
+                <div id="split_viewer"></div>
+            </figure>
+        </div>
+        <div class="btn-group" role="group" aria-label="...">
+            <button type="button" id="prevImage" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span></button>
+            <button type="button" id="nextImage" class="btn btn-default"><span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span></button>
+        </div>
+    </div>
+    <div class="row text-center">
+        <div class="col-md-6 form-group">
+            <label>
+                Left
+            </label>
+            <select id="selLeft" class="form-control">
+            </select>
+        </div>
+        <div class="col-md-6 form-group">
+            <label>
+                Right
+            </label>
+            <select id="selRight" class="form-control">
+            </select>
+        </div>
+    </div>
+    <div class="row col-md-12">
+        <h3>UI controls</h3>
+        <p >
+            <strong>Drag </strong>the red divider to compare the images at different locations
+        </p>
+        <p>
+            <strong>Move around </strong> the image by holding the <em>shift key</em> and dragging the image
+        </p>
+        <p>
+            <strong>Zoom</strong> by using the mouse-wheel
+        </p>
+        <p>
+            <strong>Navigate</strong> between images in the dataset by using the <em>left</em> and <em>right</em> arrow keys
+        </p>
+    </div>
+    {% if notes %}
+    <div class="row col-md-12">
+      <h3>Notes</h3>
+      {{ notes }}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
