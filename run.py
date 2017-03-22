@@ -29,9 +29,11 @@ VIEWER_PATH = "viewer"
 
 def _viewer_data(e):
   epath = os.path.join(_experiment_path(e), VIEWER_PATH)
+  print epath
   if os.path.exists(epath):
     dsets = os.listdir(epath)
-    dsets = [d for d in dsets if os.path.isdir(os.path.join(epath, d))]
+    dsets = sorted(dsets)
+    # dsets = [d for d in dsets if os.path.isdir(os.path.join(epath, d))]
   else:
     dsets = []
   if dsets:
@@ -42,6 +44,7 @@ def _viewer_data(e):
     images2 = set(os.listdir(os.path.join(epath, d)))
     images = images.intersection(images2)
   images = list(images)
+  images = sorted(images)
   urls = {}
   for d in dsets:
     urls[d] = {}
@@ -61,6 +64,7 @@ def _experiment_path(e):
 @app.route("/")
 def index():
   path = app.config['DATA_ROOT']
+  print path
   if os.path.exists(path):
     experiments = os.listdir(path)
   else:
