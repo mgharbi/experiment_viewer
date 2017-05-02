@@ -55,10 +55,6 @@ def _viewer_data(e):
     for im in sorted(images):
       data[d][im] = url_for('image_file', experiment=e, dataset=d, filename=im)
 
-    print data[d].keys()
-
-      # urls[d][im] = 
-
   data  = json.dumps(data)
   return data
 
