@@ -8,33 +8,29 @@ function bold(x) {
 function parse_url() {
   var parsed_url = URI.parse(window.location.href)
     var url_params = URI.parseQuery(parsed_url.query)
-    console.log("url params:", url_params );
 
   return url_params;
 }
 
 $(document).ready(function() {
-  data = $('#datasets').data();
-  datasets = data.datasets;
-  images = data.images;
-  urls = data.urls;
-
-  console.log("urls", urls);
+  data = $('#datasets').data().images;
+  datasets = Object.keys(data);
 
   // Fill in drop-down lists
-  Object.keys(images).forEach(function(t) { 
-    $('#selImage').append('<option>'+images[t]+'</option>');
+  datasets.sort().forEach(function(t) { 
+    $('#selDataset').append('<option>'+t+'</option>');
   });
-  Object.keys(datasets).forEach(function(t) { 
-    $('#selLeft').append('<option>'+datasets[t]+'</option>');
-    $('#selRight').append('<option>'+datasets[t]+'</option>');
+  dataset_name = $("#selDataset").val();
+
+  Object.keys(data[dataset_name]).sort().forEach(function(t) { 
+    $('#selLeft').append('<option>'+t+'</option>');
+    $('#selRight').append('<option>'+t+'</option>');
   });
 
   url_params = parse_url();
 
-  imname = $("#selImage").val();
-  dataset_left = $("#selLeft").val();
-  dataset_right = $("#selRight").val();
+  image_left = $("#selLeft").val();
+  image_right = $("#selRight").val();
 
   var path_left   = '';
   var path_right  = '';
@@ -78,78 +74,75 @@ $(document).ready(function() {
   };
 
   function update_left() {
-    console.log("imname", imname);
-    if(!imname){
+    if(!dataset_name){
       return;
     }
     ready_l     = false;
-    path_left = urls[dataset_left][imname];
+    path_left = data[dataset_name][image_left];
     im_left.src = path_left;
   };
 
   function update_right() {
-    if(!imname){
+    if(!dataset_name){
       return;
     }
     ready_r = false;
-    path_right = urls[dataset_right][imname];
+    path_right = data[dataset_name][image_right];
     im_right.src = path_right;
   };
 
   imagehaschanged = function() {
-    imname = $('#selImage').val();
+    dataset_name = $('#selDataset').val();
     ready_r = false;
     ready_l = false;
     update_left();
     update_right();
-    $("#imageTitle").text(imname);
+    $("#imageTitle").text(dataset_name);
   };
 
-  $('#selImage').change(function() {
+  $('#selDataset').change(function() {
     imagehaschanged();
   });
   $('#selLeft').change(function() {
-    dataset_left  = $('#selLeft').val();
-    $('.leftTitle').text(dataset_left);
+    image_left  = $('#selLeft').val();
+    $('.leftTitle').text(image_left);
     update_left();
   });
 
   $('#selRight').change(function() {
-    dataset_right  = $('#selRight').val();
-    console.log('right change', dataset_right);
-    $('.rightTitle').text(dataset_right);
+    image_right  = $('#selRight').val();
+    $('.rightTitle').text(image_right);
     update_right();
   });
 
   // UI
   $(document).keydown(function(e){
     if(e.which == $.ui.keyCode.LEFT) {
-      imselected = $('#selImage')[0].selectedIndex;
-      imselected = (imselected <= 0) ? 0 : (imselected-1);
-      $('#selImage')[0].selectedIndex = imselected;
+      dset_selected = $('#selDataset')[0].selectedIndex;
+      dset_selected = (dset_selected <= 0) ? 0 : (dset_selected-1);
+      $('#selDataset')[0].selectedIndex = dset_selected;
       imagehaschanged();
     } else if (e.which == $.ui.keyCode.RIGHT) {
-      imselected = $('#selImage')[0].selectedIndex;
-      imselected = imselected >= images.length-1 ? images.length-1 : (imselected+1);
-      console.log(imselected, images.length);
-      $('#selImage')[0].selectedIndex = imselected;
+      dset_selected = $('#selDataset')[0].selectedIndex;
+      dset_selected = dset_selected >= datasets.length-1 ? datasets.length-1 : (dset_selected+1);
+      $('#selDataset')[0].selectedIndex = dset_selected;
       imagehaschanged();
     } else if (e.which == $.ui.keyCode.SPACE) {
-      imselected = $('#selImage')[0].selectedIndex;
-      $('#debug-area').append("<li>"+images[imselected]+"</li>")
+      dset_selected = $('#selDataset')[0].selectedIndex;
+      $('#debug-area').append("<li>"+datasets[dset_selected]+"</li>")
     }
   });
 
   $("#prevImage").click(function(e) {
-    imselected = $('#selImage')[0].selectedIndex;
-    imselected = (imselected <= 0) ? 0 : (imselected-1);
-    $('#selImage')[0].selectedIndex = imselected;
+    dset_selected = $('#selDataset')[0].selectedIndex;
+    dset_selected = (dset_selected <= 0) ? 0 : (dset_selected-1);
+    $('#selDataset')[0].selectedIndex = dset_selected;
     imagehaschanged();
   });
   $("#nextImage").click(function(e) {
-    imselected = $('#selImage')[0].selectedIndex;
-    imselected = imselected >= images.length-1 ? images.length-1 : (imselected+1);
-    $('#selImage')[0].selectedIndex = imselected;
+    dset_selected = $('#selDataset')[0].selectedIndex;
+    dset_selected = dset_selected >= datasets.length-1 ? datasets.length-1 : (dset_selected+1);
+    $('#selDataset')[0].selectedIndex = dset_selected;
     imagehaschanged();
   });
 

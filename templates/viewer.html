@@ -3,7 +3,7 @@
   <script type="text/javascript" charset="utf&#45;8" src="{{url_for('static', filename='js/main.js')}}"></script>
 {% endblock %}
 {% block body %}
-<meta id="datasets" data-datasets="{{datasets}}" data-images="{{images}}" data-urls="{{urls}}">
+<meta id="datasets" data-images="{{data}}">
 <div class="row col-md-12 header-block">
     <h1>
       {{ experiment_name }}
@@ -16,17 +16,17 @@
     <div class="row">
         <div class="form-group text-left col-md-6">
             <label>
-                Image
+                Dataset
             </label>
-            <select id="selImage" class="form-control">
+            <select id="selDataset" class="form-control">
             </select>
         </div>
     </div>
 </div>
 <div class="col-md-10 ">
     <div class="row text-center">
-        <h3 class="text-center"> <strong class="leftTitle  text-capitalize">
-          </strong> vs. <strong class="rightTitle  text-capitalize"></strong></br>
+        <h3 class="text-center"> <strong class="leftTitle">
+          </strong> vs. <strong class="rightTitle"></strong></br>
           <small><span id="imageTitle"> </span></small>
         </h3>
         <p class="text-center"> zoom <span id="scale_label"> 100 % </span></p>
