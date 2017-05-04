@@ -20,17 +20,6 @@ $(document).ready(function() {
   datasets.sort().forEach(function(t) { 
     $('#selDataset').append('<option>'+t+'</option>');
   });
-  dataset_name = $("#selDataset").val();
-
-  Object.keys(data[dataset_name]).sort().forEach(function(t) { 
-    $('#selLeft').append('<option>'+t+'</option>');
-    $('#selRight').append('<option>'+t+'</option>');
-  });
-
-  url_params = parse_url();
-
-  image_left = $("#selLeft").val();
-  image_right = $("#selRight").val();
 
   var path_left   = '';
   var path_right  = '';
@@ -95,12 +84,24 @@ $(document).ready(function() {
     dataset_name = $('#selDataset').val();
     ready_r = false;
     ready_l = false;
+
+    $('#selLeft').empty();
+    $('#selRight').empty();
+    Object.keys(data[dataset_name]).sort().forEach(function(t) { 
+      $('#selLeft').append('<option>'+t+'</option>');
+      $('#selRight').append('<option>'+t+'</option>');
+    });
+
+    image_left = $("#selLeft").val();
+    image_right = $("#selRight").val();
+
     update_left();
     update_right();
     $("#imageTitle").text(dataset_name);
   };
 
   $('#selDataset').change(function() {
+    console.log("Sel dataset")
     imagehaschanged();
   });
   $('#selLeft').change(function() {
