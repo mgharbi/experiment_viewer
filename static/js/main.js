@@ -14,7 +14,10 @@ function parse_url() {
 
 $(document).ready(function() {
   data = $('#datasets').data().images;
+  meta = $('#datasets').data().meta;
   datasets = Object.keys(data);
+
+  init = true;
 
   // Fill in drop-down lists
   datasets.sort().forEach(function(t) { 
@@ -67,8 +70,17 @@ $(document).ready(function() {
       return;
     }
     ready_l     = false;
-    path_left = data[dataset_name][image_left];
+    path_left = data[dataset_name][image_left]["url"];
     im_left.src = path_left;
+
+    info_l = data[dataset_name][image_left]["info"];
+    $("#infoLeft").empty();
+
+    if(info_l) {
+      Object.keys(info_l).sort().forEach(function(t) { 
+        $("#infoLeft").append("<tr><th>"+t+"</th><td>"+info_l[t]+"</td></tr>");
+      });
+    } 
   };
 
   function update_right() {
@@ -76,8 +88,17 @@ $(document).ready(function() {
       return;
     }
     ready_r = false;
-    path_right = data[dataset_name][image_right];
+    path_right = data[dataset_name][image_right]["url"];
     im_right.src = path_right;
+
+    info_r = data[dataset_name][image_right]["info"];
+    $("#infoRight").empty();
+
+    if(info_r) {
+      Object.keys(info_r).sort().forEach(function(t) { 
+        $("#infoRight").append("<tr><th>"+t+"</th><td>"+info_r[t]+"</td></tr>");
+      });
+    } 
   };
 
   imagehaschanged = function() {
@@ -85,12 +106,19 @@ $(document).ready(function() {
     ready_r = false;
     ready_l = false;
 
-    $('#selLeft').empty();
-    $('#selRight').empty();
-    Object.keys(data[dataset_name]).sort().forEach(function(t) { 
-      $('#selLeft').append('<option>'+t+'</option>');
-      $('#selRight').append('<option>'+t+'</option>');
-    });
+    console.log(meta);
+    if(init || meta["refresh_list"]) {
+      $('#selLeft').empty();
+      $('#selRight').empty();
+      Object.keys(data[dataset_name]).sort().forEach(function(t) { 
+        $('#selLeft').append('<option>'+t+'</option>');
+        $('#selRight').append('<option>'+t+'</option>');
+      });
+    }
+
+    if(init) {
+      init = false;
+    }
 
     image_left = $("#selLeft").val();
     image_right = $("#selRight").val();

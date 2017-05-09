@@ -21,6 +21,8 @@ parser.add_argument('--debug', dest='debug', action='store_true')
 parser.add_argument('--port', default=5000, type=int)
 parser.add_argument('--image_dir', default='images', type=str)
 parser.add_argument('--notes_file', default='notes.md', type=str)
+parser.add_argument('--mode', default='datasets', choices=["datasets", "methods"],
+                    help="folder structure", type=str)
 parser.set_defaults(debug=False)
 args = parser.parse_args()
 
@@ -35,28 +37,57 @@ ROOT_KEY = "root"
 def _viewer_data(e):
   epath = os.path.join(_experiment_path(e), args.image_dir)
   print "viewing experiment", epath
-  if os.path.exists(epath):
-    dsets = os.listdir(epath)
-    dsets = sorted([d for d in dsets if os.path.isdir(os.path.join(epath, d))])
-    dsets.append(ROOT_KEY)
-  else:
-    dsets = []
 
   data = {}
-  for d in dsets:
-    if d == ROOT_KEY:
-      images = os.listdir(epath)
+  metadata = {}
+  if args.mode == "datasets":
+    if os.path.exists(epath):
+      dsets = os.listdir(epath)
+      dsets = sorted([d for d in dsets if os.path.isdir(os.path.join(epath, d))])
+      dsets.append(ROOT_KEY)
     else:
-      images = os.listdir(os.path.join(epath, d))
-    if not images:
-      continue
-    images = [im for im in images if im_regexp.match(im)]
-    data[d] = {}
-    for im in sorted(images):
-      data[d][im] = url_for('image_file', experiment=e, dataset=d, filename=im)
+      dsets = []
+
+    for d in dsets:
+      if d == ROOT_KEY:
+        images = os.listdir(epath)
+      else:
+        images = os.listdir(os.path.join(epath, d))
+      if not images:
+        continue
+      images = [im for im in images if im_regexp.match(im)]
+      data[d] = {}
+      for im in sorted(images):
+        data[d][im] = {"url": url_for('image_file', experiment=e, dataset=d, filename=im)}
+    metadata["refresh_list"] = True
+  elif args.mode == "methods":
+    if os.path.exists(epath):
+      methods = os.listdir(epath)
+      methods = sorted([d for d in methods if os.path.isdir(os.path.join(epath, d))])
+    else:
+      methods = []
+
+    if methods:
+      images = os.listdir(os.path.join(epath, methods[0]))
+      images = [im for im in images if im_regexp.match(im)]
+
+      for im in images:
+        data[im] = {}
+        for m in methods:
+          data[im][m] = {"url": url_for('image_file', experiment=e, dataset=m, filename=im)}
+          path = os.path.join(epath, m, im)
+          ipath = os.path.splitext(path)[0] + ".json"
+          if os.path.exists(ipath):
+            with open(ipath) as jfid:
+              info = json.load(jfid)
+              data[im][m]["info"] = info
+    metadata["refresh_list"] = False
+  else:
+    raise NotImplemented
 
   data  = json.dumps(data)
-  return data
+  metadata  = json.dumps(metadata)
+  return data, metadata
 
 
 def _experiment_path(e):
@@ -97,12 +128,12 @@ def experiment(experiment_name=None):
   else:
     print "Experiment", experiment_name, "has no", args.notes_file
 
-  data = _viewer_data(experiment_name)
+  data, meta = _viewer_data(experiment_name)
 
   return render_template(
       'viewer.html', 
       experiment_name=experiment_name,
       notes=notes,
-      data=data)
+      data=data, meta=meta)
 
 app.run(debug=args.debug, host='0.0.0.0', port=args.port)

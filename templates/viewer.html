@@ -3,7 +3,7 @@
   <script type="text/javascript" charset="utf&#45;8" src="{{url_for('static', filename='js/main.js')}}"></script>
 {% endblock %}
 {% block body %}
-<meta id="datasets" data-images="{{data}}">
+<meta id="datasets" data-images="{{data}}" data-meta="{{meta}}">
 <div class="row col-md-12 header-block">
     <h1>
       {{ experiment_name }}
@@ -55,6 +55,20 @@
             <select id="selRight" class="form-control">
             </select>
         </div>
+    </div>
+    <div class="row col-md-12">
+      <div class="col-md-6">
+          <table class="table table-hover">
+            <tbody id="infoLeft">
+            </tbody>
+          </table>
+      </div>
+      <div class="col-md-6">
+          <table class="table table-hover">
+            <tbody id="infoRight">
+            </tbody>
+          </table>
+      </div>
     </div>
     <div class="row col-md-12">
         <h3>UI controls</h3>
