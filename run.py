@@ -59,7 +59,19 @@ def _viewer_data(e):
       data[d] = {}
       for im in sorted(images):
         data[d][im] = {"url": url_for('image_file', experiment=e, dataset=d, filename=im)}
+        # TODO: path to blank image if does not exist
+        if d == ROOT_KEY:
+          path = os.path.join(epath, im)
+        else:
+          path = os.path.join(epath, d, im)
+          # path2 = path
+        ipath = os.path.splitext(path)[0] + ".json"
+        if os.path.exists(ipath):
+          with open(ipath) as jfid:
+            info = json.load(jfid)
+            data[d][im]["info"] = info
     metadata["refresh_list"] = True
+
   elif args.mode == "methods":
     if os.path.exists(epath):
       methods = os.listdir(epath)
@@ -68,14 +80,22 @@ def _viewer_data(e):
       methods = []
 
     if methods:
-      images = os.listdir(os.path.join(epath, methods[0]))
+      images = []
+      for m in methods:
+        images += os.listdir(os.path.join(epath, m))
+      images = list(set(images))
       images = [im for im in images if im_regexp.match(im)]
 
       for im in images:
         data[im] = {}
         for m in methods:
-          data[im][m] = {"url": url_for('image_file', experiment=e, dataset=m, filename=im)}
           path = os.path.join(epath, m, im)
+          if not os.path.exists(path):
+            print "no image found", path
+            data[im][m] = {"url": ""}
+            continue
+
+          data[im][m] = {"url": url_for('image_file', experiment=e, dataset=m, filename=im)}
           ipath = os.path.splitext(path)[0] + ".json"
           if os.path.exists(ipath):
             with open(ipath) as jfid:
@@ -87,6 +107,7 @@ def _viewer_data(e):
 
   data  = json.dumps(data)
   metadata  = json.dumps(metadata)
+
   return data, metadata
 
 

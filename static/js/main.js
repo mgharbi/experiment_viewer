@@ -24,6 +24,8 @@ $(document).ready(function() {
     $('#selDataset').append('<option>'+t+'</option>');
   });
 
+  console.log(data);
+
   var path_left   = '';
   var path_right  = '';
 
@@ -72,6 +74,7 @@ $(document).ready(function() {
     ready_l     = false;
     path_left = data[dataset_name][image_left]["url"];
     im_left.src = path_left;
+    console.log("imleft src", path_left)
 
     info_l = data[dataset_name][image_left]["info"];
     $("#infoLeft").empty();
@@ -81,6 +84,13 @@ $(document).ready(function() {
         $("#infoLeft").append("<tr><th>"+t+"</th><td>"+info_l[t]+"</td></tr>");
       });
     } 
+
+    if(path_left == "") {  // No image available
+      im_left.src = null;
+      $("#infoLeft").empty();
+      $("#infoLeft").append("<tr><th>INFO</th><td>No image available</td></tr>");
+    }
+
   };
 
   function update_right() {
@@ -99,6 +109,13 @@ $(document).ready(function() {
         $("#infoRight").append("<tr><th>"+t+"</th><td>"+info_r[t]+"</td></tr>");
       });
     } 
+
+    if(path_right == "") {  // No image available
+      im_right.src = null;
+      $("#infoRight").empty();
+      $("#infoRight").append("<tr><th>INFO</th><td>No image available</td></tr>");
+    }
+
   };
 
   imagehaschanged = function() {

@@ -12,6 +12,12 @@
     Back to  <a href="{{url_for('index')}}">index</a>
     </p>
 </div>
+{% if notes %}
+<div class="row col-md-12">
+  <h3>Notes</h3>
+  {{ notes }}
+</div>
+{% endif %}
 <div class="col-md-8">
     <div class="row">
         <div class="form-group text-left col-md-6">
@@ -85,11 +91,5 @@
             <strong>Navigate</strong> between images in the dataset by using the <em>left</em> and <em>right</em> arrow keys
         </p>
     </div>
-    {% if notes %}
-    <div class="row col-md-12">
-      <h3>Notes</h3>
-      {{ notes }}
-    </div>
-    {% endif %}
 </div>
 {% endblock %}
