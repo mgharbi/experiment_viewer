@@ -19,7 +19,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--data', default='data')
 parser.add_argument('--debug', dest='debug', action='store_true')
 parser.add_argument('--port', default=5000, type=int)
-parser.add_argument('--image_dir', default='images', type=str)
+parser.add_argument('--image_dir', default='', type=str)
 parser.add_argument('--notes_file', default='notes.md', type=str)
 parser.add_argument('--mode', default='datasets', choices=["datasets", "methods"],
                     help="folder structure", type=str)
